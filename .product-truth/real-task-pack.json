@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "protocol": "docatlas-source-real-task-pack-v1",
+  "repository": "Vanilla1999/docmancer7",
+  "frozen_inventory_head": "7f85a589a4b3f479debac886f73c9a740356752b",
+  "tasks": [
+    {
+      "id": "docmancer7-real-001",
+      "fix_commit": "14987a36b13bbbddda077ff64bac9a4539a1a299",
+      "issue_text": "A pre-0.5 configuration can contain both legacy vector_store path fields and new Qdrant fields, plus the old singular embedding block. Upgrades currently reject or lose that configuration. Migrate mixed legacy/new shapes without discarding the user's new provider, collection, or embedding selection.",
+      "gold_paths": ["docmancer/core/config.py"],
+      "hidden_test_path": "tests/test_config.py",
+      "public_nodeid": "tests/test_config.py::test_new_vector_store_collection_only_defaults_provider",
+      "hidden_nodeid": "tests/test_config.py::test_mixed_legacy_and_new_vector_store_migrates"
+    },
+    {
+      "id": "docmancer7-real-002",
+      "fix_commit": "d3c479499f63519317f7b4c6df2a24433dd3f3f3",
+      "issue_text": "Registry client 404 handling confuses a missing API endpoint with a missing pack and can lose the requested pack name when the server returns only a query-based 404. Classify HTML API-endpoint 404s as unreachable and preserve the query pack name for ordinary pack-not-found responses.",
+      "gold_paths": ["docmancer/core/registry_client.py"],
+      "hidden_test_path": "tests/test_registry_core.py",
+      "public_nodeid": "tests/test_registry_core.py::test_registry_client_rejects_malformed_url",
+      "hidden_nodeid": "tests/test_registry_core.py::test_registry_client_reports_missing_api_endpoint"
+    },
+    {
+      "id": "docmancer7-real-003",
+      "fix_commit": "91466b2580208e62574a178bbaae2ca1d18cfe3c",
+      "issue_text": "list and inspect surface a raw RuntimeError/traceback when another process owns embedded Qdrant, while doctor silently loses useful status. Convert only the known embedded lock conflict into clear CLI behavior without masking unrelated RuntimeError failures.",
+      "gold_paths": ["docmancer/cli/commands.py"],
+      "hidden_test_path": "tests/test_cli.py",
+      "public_nodeid": "tests/test_cli.py::test_list_command_all_uses_raw_entries",
+      "hidden_nodeid": "tests/test_cli.py::test_list_command_reports_busy_embedded_qdrant_without_traceback"
+    },
+    {
+      "id": "docmancer7-real-004",
+      "fix_commit": "8773f32e602b5712cf30be09052f4ac36dfa3318",
+      "issue_text": "SQLite FTS returns no context when a natural-language multi-term query cannot satisfy the implicit AND match even though relevant sections contain subsets of the terms. Keep the normal phrase query, but add a bounded OR-token fallback when it returns no rows.",
+      "gold_paths": ["docmancer/core/sqlite_store.py"],
+      "hidden_test_path": "tests/test_agent.py",
+      "public_nodeid": "tests/test_agent.py::test_query_returns_context_pack_metadata",
+      "hidden_nodeid": "tests/test_agent.py::test_query_falls_back_to_or_when_all_terms_do_not_match_one_section"
+    },
+    {
+      "id": "docmancer7-real-005",
+      "fix_commit": "5a1502b9f5b6fddbfd2c5f891792adaedc4c1f6c",
+      "issue_text": "Sitemap indexes can recursively fetch too many child entries and can follow child sitemap URLs outside the documentation scope. Bound parsed entries by max_pages/max_entries and skip out-of-scope sitemap children while preserving normal sitemap traversal.",
+      "gold_paths": ["docmancer/connectors/fetchers/pipeline/sitemap.py"],
+      "hidden_test_path": "tests/test_sitemap.py",
+      "public_nodeid": "tests/test_sitemap.py::TestParseXmlContent::test_sitemap_index_follows_children",
+      "hidden_nodeid": "tests/test_sitemap.py::TestParseXmlContent::test_sitemap_index_stops_at_max_entries"
+    },
+    {
+      "id": "docmancer7-real-006",
+      "fix_commit": "2b96b7aca0a1d766a0b97ef5b0ea5d90d8f65d7d",
+      "issue_text": "The SQLite-era default query budget is still 1200 tokens even though the intended retrieval default is 2400. Raise only the configuration default while preserving explicitly configured budgets and validation.",
+      "gold_paths": ["docmancer/core/config.py"],
+      "hidden_test_path": "tests/test_config.py",
+      "public_nodeid": "tests/test_config.py::test_config_from_dict",
+      "hidden_nodeid": "tests/test_config.py::test_default_config_uses_sqlite_index"
+    },
+    {
+      "id": "docmancer7-real-007",
+      "fix_commit": "293c6c9f84badaba3da65afc2f218ca610f9b3c8",
+      "issue_text": "Embedding batch_size accepts zero or negative values, which makes the new batching path invalid at runtime. Add a positive lower bound to the configuration schema without changing unrelated embedding settings.",
+      "gold_paths": ["docmancer/core/config.py"],
+      "hidden_test_path": "tests/test_config.py",
+      "public_nodeid": "tests/test_config.py::test_settings_do_not_auto_load_dotenv",
+      "hidden_nodeid": "tests/test_config.py::test_embedding_batch_size_must_be_positive"
+    },
+    {
+      "id": "docmancer7-real-008",
+      "fix_commit": "56c001d27614107068c4a07553db4e4034c8afef",
+      "issue_text": "Users paste registry web-page URLs into pull, but pack-reference parsing only understands name or name@version. Normalize https registry page URLs, including an optional version query parameter, before the existing pack-reference split logic.",
+      "gold_paths": ["docmancer/cli/commands.py"],
+      "hidden_test_path": "tests/test_registry_cli.py",
+      "public_nodeid": "tests/test_registry_cli.py::test_registry_commands_are_lazy_imported",
+      "hidden_nodeid": "tests/test_registry_cli.py::test_registry_page_url_can_be_used_as_pack_ref"
+    }
+  ]
+}
